@@ -29,13 +29,14 @@ void loadBooks(const char *filename)
 
     bookCount = 0; 
 
-    cout << endl;
-    fin.close();
-    
-    ofstream fout(filename, ios::trunc);
-    if (fout) {
-        fout.close();
+    while (bookCount < MAX_BOOKS && fin >> books[bookCount].title) {
+        
+        fin >> books[bookCount].author >> books[bookCount].year >> books[bookCount].rating;
+        bookCount++;
     }
+
+    cout << "Загружено книг: " << bookCount << endl;
+    fin.close();
 }
 
 void saveBookToFile(const char *filename, Book b)
@@ -70,16 +71,21 @@ void addBook()
     cin.ignore(1000, '\n');
 
     cout << "Введите название книги: ";
-    cin >> b.title;
+    cin.getline(b.title, 100);
 
     cout << "Введите автора: ";
-    cin >> b.author;
+    cin.getline(b.author, 50);
 
     cout << "Год прочтения: ";
     cin >> b.year;
 
     cout << "Ваша оценка (0-10): ";
     cin >> b.rating;
+
+    if (b.year < 0 || b.rating < 0 || b.rating > 10) {
+        cout << "Ошибка: некорректный год или оценка!" << endl;
+        return;
+    }
 
     books[bookCount] = b;
     bookCount++; 
